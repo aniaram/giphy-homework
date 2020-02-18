@@ -8,40 +8,44 @@
 </head>
 <body>
     <h1>Welcome 2 Giphy World</h1>
-
-    <button data-food="pizza">pizza</button>
-    <button data-food="taco">taco</button>
-    <button data-food="sushi">sushi</button>
-    <button data-food="frenchfries">frenchfries</button>
-    <button data-food="pasta">pasta</button>
-    <button data-food="brownies">brownies</button>
-    <button data-food="pancakes">pancakes</button>
+     <div id="buttons-view"></div> 
+     <form id="food=form"
+        <label for="food-input">Add a Food!</label>
+     <input type="text" id="food-input"><br>
+     <input id="add-food" type="submit" value="Add a Food!">
+    </form>
      <div id="gifs-appear-here">
     </div>
-
-    <form id="food-form">
-        <label for="food-input">Add a Food!</label>
-        <input type="text" id="food-input"><br>
-        <input id="add-food" type="submit" value="Add a Food!">
-      </form>
-  
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
-
-
-        $("button").on("click", function() {
-            var food = $(this).attr("data-food");
+var food = [ "pizza" , "taco" , "sushi" , "frenchfries" , "pasta" , "brownies" , "pancakes"] 
+    function renderButtons() {
+        $("#buttons-view").empty();
+        for (var i = 0; i < food.length; i++) {
+            var a = $("<button>");
+          a.addClass("food-btn");
+          a.attr("data-name", food[i]);
+          a.text(food[i]);
+          $("#buttons-view").append(a);
+        }
+      }
+      $("#add-food").on("click", function(event) {
+        event.preventDefault();
+        var foodText = $("#food-input").val().trim();
+        food.push(foodText)
+        renderButtons();
+      });
+        $(document).on("click", ".food-btn", function() {
+          var food = $(this)[0].textContent;
+          console.log(food)
           var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + food + "&api_key=rXeLETy6FXjOicxgOdPIFAEg4wzve7wM";
-            var food = [ "pizza" , "taco" , "sushi" , "frenchfries" , "pasta" , "brownies" , "pancakes"] 
-    // apikey = rXeLETy6FXjOicxgOdPIFAEg4wzve7wM 
+   // apikey = rXeLETy6FXjOicxgOdPIFAEg4wzve7wM 
         $.ajax({
         url: queryURL,
         method: "GET"
       })
             .then(function(response) {
           console.log(queryURL);
-
           console.log(response);
           var results = response.data;
           for (var i = 0; i < results.length; i++) {
@@ -55,28 +59,9 @@
         }
         });
     });
-    function renderButtons() {
-        $("#buttons-view").empty();
-        for (var i = 0; i < food.length; i++) {
-            var a = $("<button>");
-          a.addClass("food-btn");
-          a.attr("data-name", food[i]);
-          a.text(food[i]);
-          $("#buttons-view").append(a);
-        }
-      }
-
-      $("#add-movie").on("click", function(event) {
-        event.preventDefault();
-        var food = $("#food-input").val().trim();
-        food.push(food);
-        renderButtons();
-      });
-
-      $(document).on("click", ".food-btn", displayfoodInfo);
       renderButtons();
     </script>
        
-    </script>
+
 </body>
 </html>
